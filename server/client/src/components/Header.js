@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class Header extends Component {
+class Header extends Component {
+  renderContent() {
+    switch (this.props.auth) {
+      case null:
+        return;
+      case false:
+        return <a href="/auth/google">Login With Google</a>;
+      default:
+        return <a href="/api/logout">Logout</a>;
+    }
+  }
   render() {
     return (
       <nav>
@@ -9,12 +20,16 @@ export default class Header extends Component {
             Emaily
           </a>
           <ul className="right">
-            <li>
-              <a href="/auth/google">Sign In With Google</a>
-            </li>
+            <li>{this.renderContent()}</li>
           </ul>
         </div>
       </nav>
     );
   }
 }
+
+const mapStateToProps = ({ auth }) => {
+  return { auth };
+};
+
+export default connect(mapStateToProps)(Header);
